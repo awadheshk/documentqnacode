@@ -9,7 +9,7 @@ gcloud services enable run.googleapis.com
 # Step 2: Download required files from GitHub
 echo "Downloading required application files...${RESET}"
 
-wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/myresturantapp.py
+wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/mdocumentvectorFS.py
 wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/Dockerfile
 wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/requirements.txt
 
