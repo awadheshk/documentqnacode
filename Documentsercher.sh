@@ -9,9 +9,9 @@ gcloud services enable run.googleapis.com
 # Step 2: Download required files from GitHub
 echo "Downloading required application files...${RESET}"
 
-wget https://raw.githubusercontent.com/awadheshk/resturantapp/refs/heads/main/myresturantapp.py
-wget https://raw.githubusercontent.com/awadheshk/resturantapp/refs/heads/main/Dockerfile
-wget https://raw.githubusercontent.com/awadheshk/resturantapp/refs/heads/main/requirements.txt
+wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/myresturantapp.py
+wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/Dockerfile
+wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/requirements.txt
 
 # Step 3: Set project and region variables
 echo "Setting GCP project and region variables...${RESET}"
