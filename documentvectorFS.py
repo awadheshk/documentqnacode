@@ -52,8 +52,10 @@ embedding_model = VertexAIEmbeddings(model_name="text-embedding-005")
 #!gsutil cp "C:\\Users\\A585918\\Downloads\\google-2023-carbon-removal-research-award.pdf"  . # gs://mydocument1-bucket1/
 
 #!gcloud storage cp gs://mydocument1-bucket1/google-2023-carbon-removal-research-award.pdf .
+#loader = PyMuPDFLoader("./google-2023-carbon-removal-research-award.pdf")
 
-loader = PyMuPDFLoader("./google-2023-carbon-removal-research-award.pdf")
+!gcloud storage cp gs://partner-genai-bucket/genai069/nyc_food_safety_manual.pdf .
+loader = PyMuPDFLoader("./nyc_food_safety_manual.pdf")
 data = loader.load()
 
 def clean_page(page):
