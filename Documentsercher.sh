@@ -31,7 +31,7 @@ echo
 echo "Setting up Python virtual environment...${RESET}"
 python3 -m venv documentqna
 source documentqna/bin/activate
-python3 -m  pip install -r requirements.txt
+python3 -m  pip install -r requirement.txt
 
 # Step 6: Create Artifact Repository
 
