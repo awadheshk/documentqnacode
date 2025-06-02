@@ -9,9 +9,9 @@ gcloud services enable run.googleapis.com
 # Step 2: Download required files from GitHub
 echo "Downloading required application files...${RESET}"
 
-wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/mdocumentvectorFS.py
+wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/documentvectorFS.py
 wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/Dockerfile
-wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/requirements.txt
+wget https://raw.githubusercontent.com/awadheshk/documentqnacode/refs/heads/main/requirement.txt
 
 # Step 3: Set project and region variables
 echo "Setting GCP project and region variables...${RESET}"
@@ -32,14 +32,6 @@ echo "Setting up Python virtual environment...${RESET}"
 python3 -m venv documentqna
 source documentqna/bin/activate
 python3 -m  pip install -r requirements.txt
-
-# Step 5: Start Streamlit application
-# echo "Running Kitchen Recipe Generator application in the background...${RESET}"
-# nohup streamlit run chef.py \
-#  --browser.serverAddress=localhost \
-#  --server.enableCORS=false \
-#  --server.enableXsrfProtection=false \
-#  --server.port 8080 > kitchenrecipe.log 2>&1 &
 
 # Step 6: Create Artifact Repository
 
