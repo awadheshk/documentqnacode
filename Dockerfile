@@ -1,10 +1,7 @@
-FROM python:3.13-slim
-
-EXPOSE 8080
+FROM python:3.9
 WORKDIR /app
-
-COPY . ./
-
-RUN pip install --no-cache-dir -r requirements.txt
-
-ENTRYPOINT ["streamlit", "run", "chef.py", "--server.port=8080", "--server.address=0.0.0.0"]
+COPY . .
+RUN pip install gunicorn
+RUN pip install -r requirements.txt
+ENV PORT=8080
+CMD exec gunicorn --bind :$PORT --workers 1 --threads 8 main:app
