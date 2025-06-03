@@ -6,3 +6,9 @@ google-cloud-aiplatform>=1.59.0
 google-cloud-logging
 firebase-admin
 langchain-google-vertexai>=1.0.7
+langchain-community>=0.0.19
+langchain>=0.1.7 
+langchain-core>=0.1.23 
+langchain-openai>=0.0.6
+langchain_experimental>=0.0.12
+pymupdf-1.26.0
