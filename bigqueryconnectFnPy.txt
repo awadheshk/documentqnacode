@@ -1,0 +1,169 @@
+#
+## bogquery request json from cloud shell
+
+cat > travel_requests_schema.json << EOF
+[
+  {
+    "name": "user",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "travel_purpose",
+    "type": "STRING",
+    "mode": "REQUIRED"
+  },
+  {
+    "name": "departure_city",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "destination_city",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "departure_date",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "return_date",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]
+EOF
+
+# Bigquery command
+bq --location=US mk -d Bigquery Dataset
+bq mk -t Bigquery Dataset.Bigquery Table travel_requests_schema.json
+
+#Function code main.py
+
+import functions_framework
+from google.cloud import bigquery
+
+@functions_framework.http
+def record_travel_request(request):
+    """Writes travel requests to BigQuery.
+    Args:
+        request (flask.Request): A request object with JSON
+          containing fields for user, travel_purpose, departure_city,
+          destination_city, departure_date, and return_date.
+    Returns:
+        JSON response containing a 'message' field indicating the
+          status of the request.
+    """
+    request_json = request.get_json(silent=True)
+    request_args = request.args
+    print("JSON:" + str(request_json))
+    print("args:" + str(request_args))
+
+    bq_client = bigquery.Client()
+    table_id = "Project_ID.Bigquery_Dataset.Bigquery_Table"
+
+    row_to_insert = [
+        {"user": request_json["user"],
+        "travel_purpose": request_json["travel_purpose"],
+        "departure_city": request_json.get("departure_city",""),
+        "destination_city": request_json.get("destination_city",""),
+        "departure_date": request_json.get("departure_date",""),
+        "return_date": request_json.get("return_date",""),
+        },
+    ]
+
+    errors = bq_client.insert_rows_json(table_id, row_to_insert)  # Make an API request.
+    if errors == []:
+        return {"message": "New row has been added."}
+    else:
+        return {"message": "Encountered errors while inserting rows: {}".format(errors)}
+
+
+  ## requirements.txt
+  functions-framework==3.*
+google-cloud-bigquery
+
+## Test request json 
+{
+"user": "awad Kr",
+"travel_purpose": "farm inspection",
+"departure_city": "Delhi",
+"destination_city": "Bangalore",
+"departure_date": "2025-09-08",
+"return_date": "2025-09-16"
+}
+
+
+## DialogFlow action hook yaml 
+openapi: 3.0.0
+info:
+  title: Travel Requests API
+  version: 1.0.0
+servers:
+  - url: 'YOUR_CLOUD_RUN_FUNCTION_URL'
+paths:
+  /:
+    post:
+      summary: Record a new travel request
+      operationId: recordTravelRequest
+      requestBody:
+        description: Travel request to add
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TravelRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "New row has been added."
+components:
+  schemas:
+    TravelRequest:
+      type: object
+      required:
+        - user
+        - travel_purpose
+      properties:
+        user:
+          type: string
+        travel_purpose:
+          type: string
+        departure_city:
+          type: string
+        destination_city:
+          type: string
+        departure_date:
+          type: string
+        return_date:
+          type: string
+
+# Example test data - Joe Smith. Customer Presentation. Berlin to Valencia. Feb 21 to 28.
+
+    # add IAM Cloud Run Invoker to Dialogflow Service Agent user
+    # Playbook instruction 
+    - Ask the user to provide for user name, travel purpose, departure city, destination city, and a range of dates. Assume a year of 2025 for dates without a year:
+    - Use ${TOOL:Record Travel Request}
+    - Let the user know that they should receive a list of flights to choose from in their email within 24 hours.
+
+    # Agent Display name : Corporate Travel Bot 
+
+    Use for booking travel by providing a user, travel purpose, departure city, destination city, and a date range.
+
+    example - Book travel for Alex Cymbal from Singapore to Council Bluffs, Iowa, departing on April 1 and returning on April 14, 2025, for a data center tour.
+
+
+    # O-Auth agent client URL 
+    Under Authorized redirect URIs, add https://vertexaisearch.cloud.google.com/oauth-redirect
+
+    # Add action for email and calender
+    
