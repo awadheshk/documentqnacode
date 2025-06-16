@@ -1,0 +1,39 @@
+#Cloud function 
+const nodemailer = require('nodemailer');
+
+exports.sendEmail = (req, res) => {
+  // Extract data from the request
+  const { email, subject, body } = req.body.queryResult.parameters;
+
+  // Configure email sending service (replace with your credentials)
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'your_email@gmail.com',
+      pass: 'your_email_password'
+    }
+  });
+
+  // Define the email options
+  const mailOptions = {
+    from: 'your_email@gmail.com',
+    to: email,
+    subject: subject,
+    text: body // Or html: body for HTML content
+  };
+
+  // Send the email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(200).send({
+        fulfillmentText: 'There was an error sending the email.'
+      });
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.status(200).send({
+        fulfillmentText: 'Email sent successfully!'
+      });
+    }
+  });
+};
